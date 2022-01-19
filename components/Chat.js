@@ -26,7 +26,13 @@ export class Chat extends React.Component {
       ],
     })
   }
-  
+
+  onSend(messages = []) {
+    this.setState((previousState) => ({
+      messages: GiftedChat.append(previousState.messages, messages),
+    }));
+  }
+
   render() {
     let name = this.props.route.params.name; // OR ...
     // let { name } = this.props.route.params;
