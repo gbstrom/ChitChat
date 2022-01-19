@@ -42,21 +42,23 @@ export default class Chat extends React.Component {
     const backgroundColor = this.props.route.params.backgroundColor;
 
     return (
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={messages => this.onSend(messages)}
-        user={{
-          _id: 1,
-        }}
-      />
-      // <View style={{
-      //   flex: 1,
-      //   alignItems:'center', 
-      //   justifyContent:'center',
-      //   backgroundColor: backgroundColor ? backgroundColor: '#fff',
-      // }}>
-        // {/* Rest of the UI */}
-      // </View>
+      <View style={{flex:1}}>
+        <GiftedChat
+          messages={this.state.messages}
+          onSend={messages => this.onSend(messages)}
+          user={{
+            _id: 1,
+          }}
+        />
+        { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null }
+      </View>
+       /* <View style={{
+        flex: 1,
+        alignItems:'center', 
+        justifyContent:'center',
+        backgroundColor: backgroundColor ? backgroundColor: '#fff',
+      }}>
+      </View> */
     );
   };
 }
