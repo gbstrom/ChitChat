@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Platform, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'
 
-export class Chat extends React.Component {
+export default class Chat extends React.Component {
   constructor() {
     super();
     this.state = {
