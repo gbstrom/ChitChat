@@ -42,14 +42,21 @@ export class Chat extends React.Component {
     const backgroundColor = this.props.route.params.backgroundColor;
 
     return (
-      <View style={{
-        flex: 1,
-        alignItems:'center', 
-        justifyContent:'center',
-        backgroundColor: backgroundColor ? backgroundColor: '#fff',
-      }}>
-        {/* Rest of the UI */}
-      </View>
+      <GiftedChat
+        messages={this.state.messages}
+        onSend={messages => this.onSend(messages)}
+        user={{
+          _id: 1,
+        }}
+      />
+      // <View style={{
+      //   flex: 1,
+      //   alignItems:'center', 
+      //   justifyContent:'center',
+      //   backgroundColor: backgroundColor ? backgroundColor: '#fff',
+      // }}>
+        // {/* Rest of the UI */}
+      // </View>
     );
   };
 }
