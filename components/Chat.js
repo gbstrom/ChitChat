@@ -67,7 +67,6 @@ export default class Chat extends React.Component {
     }));
   }
 
-
   onCollectionUpdate = (querySnapshot) => {
     const messages = [];
     // go through each document
@@ -81,6 +80,7 @@ export default class Chat extends React.Component {
         user: data.user,
       });
     });
+  };
 
   // This is the function that makes the background color of the sender's text bubbles black instead of blue.
   renderBubble(props) {
