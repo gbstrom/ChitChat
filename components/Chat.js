@@ -24,6 +24,9 @@ export default class Chat extends React.Component {
   if (!firebase.apps.length){
     firebase.initializeApp(firebaseConfig);
     }
+
+    this.referenceChatMessages = firebase.firestore().collection("messages");
+
   }
 
   componentDidMount() {
