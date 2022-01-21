@@ -5,6 +5,15 @@ import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 const firebase = require('firebase');
 require('firebase/firestore');
 
+const firebaseConfig = {
+  apiKey: "AIzaSyC7cUL5bWXIiPBYV7H6zSU3odUrtNP55mQ",
+  authDomain: "chitchat-f6202.firebaseapp.com",
+  projectId: "chitchat-f6202",
+  storageBucket: "chitchat-f6202.appspot.com",
+  messagingSenderId: "129417189582",
+  appId: "1:129417189582:web:5bcb6dde0c4fd59d38d89f"
+};
+
 export default class Chat extends React.Component {
   constructor() {
     super();
