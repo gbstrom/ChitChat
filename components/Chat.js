@@ -2,8 +2,9 @@ import React from 'react';
 import { View, Platform, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 
-const firebase = require('firebase');
-require('firebase/firestore');
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7cUL5bWXIiPBYV7H6zSU3odUrtNP55mQ",
@@ -25,7 +26,7 @@ export default class Chat extends React.Component {
     firebase.initializeApp(firebaseConfig);
     }
 
-    this.referenceChatMessages = firebase.firestore().collection("messages");
+  this.referenceChatMessages = firebase.firestore().collection("messages");
 
   }
 
@@ -53,6 +54,11 @@ export default class Chat extends React.Component {
         },
       ],
     })
+
+
+    this.referenceChatMessages = firebase.firestore().collection("messages");
+    this.unsubscribe = this.referenceChatMessages.onSnapshot(this.onCollectionUpdate)
+
   }
 
   onSend(messages = []) {
@@ -61,6 +67,20 @@ export default class Chat extends React.Component {
     }));
   }
 
+
+  onCollectionUpdate = (querySnapshot) => {
+    const messages = [];
+    // go through each document
+    querySnapshot.forEach((doc) => {
+      // get the QueryDocumentSnapshot's data
+      let data = doc.data();
+      messages.push({
+        _id: data._id,
+        text: data.text,
+        createdAt: data.createdAt.toDate(),
+        user: data.user,
+      });
+    });
 
   // This is the function that makes the background color of the sender's text bubbles black instead of blue.
   renderBubble(props) {
