@@ -20,6 +20,11 @@ export default class Chat extends React.Component {
     super();
     this.state = {
       messages: [],
+      user: {
+				_id: '',
+				name: '',
+				avatar: '',
+			},
     }
 
   if (!firebase.apps.length){
