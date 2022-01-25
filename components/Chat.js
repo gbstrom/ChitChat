@@ -7,6 +7,8 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
 const firebaseConfig = {
+  databaseURL: "chitchat-f6202.firebaseio.com",
+
   apiKey: "AIzaSyC7cUL5bWXIiPBYV7H6zSU3odUrtNP55mQ",
   authDomain: "chitchat-f6202.firebaseapp.com",
   projectId: "chitchat-f6202",
@@ -32,6 +34,8 @@ export default class Chat extends React.Component {
     firebase.initializeApp(firebaseConfig);
     }
 
+  firebase.firestore().settings({ experimentalAutoDetectLongPolling: true });
+
   this.referenceChatMessages = firebase.firestore().collection("messages");
 
   }
@@ -42,7 +46,6 @@ export default class Chat extends React.Component {
 
     this.props.navigation.setOptions({ title: name });
 
-    this.referenceChatMessages = firebase.firestore().collection("messages");
     this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
       if (!user) {
         return await firebase.auth().signInAnonymously();
@@ -59,25 +62,36 @@ export default class Chat extends React.Component {
       this.unsubscribe = this.referenceChatMessages
         .orderBy("createdAt", "desc")
         .onSnapshot(this.onCollectionUpdate);
+      // console.log(firebase.firestore().collection("messages"));
     });
 
-    //     // This next bit is the code for the system message that welcomes the user by name when they start chatting. I abolished it because
-    //     // it seemed no longer to be required after 5.2, but I've kept it as commented code here in case it's needed later.
-    //     // Note that I used this.props.route.params.name even though the instructions said to use this.props.navigation.state.params.name;
-    //     // I couldn't get that to work.
-    //     {
-    //      _id: 2,
-    //      text: 'Hello ' + this.props.route.params.name + '. Welcome to the chat!',
-    //      createdAt: new Date(),
-    //      system: true,
-    //     },
+  };
 
+  // this function gets all the messages in firebase and adds them to the state of the app instance running on the user's device. It is constantly
+  // running in somme mysterious way that is set up in the context of the unsubscribe function in componentDidMount.
+  onCollectionUpdate = (querySnapshot) => {
+    const messages = [];
+    // go through each document
+    querySnapshot.forEach((doc) => {
+      // get the QueryDocumentSnapshot's data
+      let data = doc.data();
+      messages.push({
+        _id: data._id,
+        text: data.text,
+        createdAt: data.createdAt.toDate(),
+        user: data.user,
+      });
+    });
+    this.setState({
+      messages
+    });
+    // console.log(this.state.messages);
   };
 
   componentWillUnmount() {
     this.unsubscribe();
     this.authUnsubscribe();
- }
+  }
 
   // this function adds whatever the user has just typed in as a new document in the firebase collection. It is called inside the onSend function.
   addMessage() {
@@ -110,26 +124,7 @@ export default class Chat extends React.Component {
 
 //  this.setState({ title: event.target.value }, () => this.APICallFunction());
 
-  // this function gets all the messages in firebase and adds them to the state of the app instance running on the user's device. It is constantly
-  // running in somme mysterious way that is set up in the context of the unsubscribe function in componentDidMount.
-  onCollectionUpdate = (querySnapshot) => {
-    const messages = [];
-    // go through each document
-    querySnapshot.forEach((doc) => {
-      // get the QueryDocumentSnapshot's data
-      let data = doc.data();
-      messages.push({
-        _id: data._id,
-        text: data.text,
-        createdAt: data.createdAt.toDate(),
-        user: data.user,
-      });
-    });
-    this.setState({
-      messages
-    });
-    // console.log(this.state.messages);
-  };
+
 }
 
   // This is the function that makes the background color of the sender's text bubbles black instead of blue.
