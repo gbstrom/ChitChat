@@ -7,8 +7,6 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
 const firebaseConfig = {
-  databaseURL: "chitchat-f6202.firebaseio.com",
-
   apiKey: "AIzaSyC7cUL5bWXIiPBYV7H6zSU3odUrtNP55mQ",
   authDomain: "chitchat-f6202.firebaseapp.com",
   projectId: "chitchat-f6202",
