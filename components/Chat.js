@@ -34,8 +34,6 @@ export default class Chat extends React.Component {
     firebase.initializeApp(firebaseConfig);
     }
 
-  firebase.firestore().settings({ experimentalAutoDetectLongPolling: true });
-
   this.referenceChatMessages = firebase.firestore().collection("messages");
 
   }
