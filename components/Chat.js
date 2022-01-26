@@ -37,7 +37,43 @@ export default class Chat extends React.Component {
 
   }
 
+  async getMessages() {
+    let messages = '';
+    try {
+      messages = await AsyncStorage.getItem('messages') || [];
+      this.setState({
+        messages: JSON.parse(messages)
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  async saveMessages() {
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+
+  // this function is for deleting messages from local storage while I'm testing things out. There may not be a need for it
+  // in the final version of the app.
+  async deleteMessages() {
+    try {
+      await AsyncStorage.removeItem('messages');
+      this.setState({
+        messages: []
+      })
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   componentDidMount() {
+    this.getMessages();
+
     // let name = this.props.route.params.name; // OR ...
     let { name } = this.props.route.params;
 
@@ -82,7 +118,6 @@ export default class Chat extends React.Component {
     this.setState({
       messages
     });
-    // console.log(this.state.messages);
   };
 
   componentWillUnmount() {
@@ -115,6 +150,7 @@ export default class Chat extends React.Component {
       messages: GiftedChat.append(previousState.messages, messages),
     }), () => {
     this.addMessage();
+    this.saveMessages();
   });
 
 // the problem with my onSend code is that addMessage is happening before the setState code is done because it should be asynchronous.
