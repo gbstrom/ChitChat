@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
 import { StatusBar } from 'expo-status-bar';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Button, Image } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location'
 import MapView from 'react-native-maps';
-import PropTypes from 'prop-types';
-import React from 'react';
+
 
 
 export default class CustomActions extends Component {
