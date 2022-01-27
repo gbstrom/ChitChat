@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Platform, KeyboardAvoidingView } from 'react-native';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -37,6 +37,8 @@ export default class Chat extends React.Component {
 
   }
 
+
+  // This function sets the messages state of the app instance on the user's device equal to the messages in AsyncStorage
   async getMessages() {
     let messages = '';
     try {
@@ -49,6 +51,7 @@ export default class Chat extends React.Component {
     }
   };
 
+  // This function saves messages into Async Storage. It is called in onSend().
   async saveMessages() {
     try {
       await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
@@ -58,7 +61,7 @@ export default class Chat extends React.Component {
   };
 
 
-  // this function is for deleting messages from local storage while I'm testing things out. There may not be a need for it
+  // This function is for deleting messages from local storage while I'm testing things out. There may not be a need for it
   // in the final version of the app.
   async deleteMessages() {
     try {
@@ -103,7 +106,7 @@ export default class Chat extends React.Component {
             .onSnapshot(this.onCollectionUpdate);
         });
       } else {
-        console.log('offline');
+        this.getMessages()
       };
     });
 
