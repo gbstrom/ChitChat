@@ -33,6 +33,8 @@ export default class Chat extends React.Component {
 				avatar: '',
 			},
       isConnected: false,
+      image: null,
+      location: null,
     }
 
   if (!firebase.apps.length){
