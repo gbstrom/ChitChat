@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, Image, ImageStore, PushNotificationIOS } from 'react-native';
+import { StyleSheet, Text, View, Button, Image,  } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location'
