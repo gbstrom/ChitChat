@@ -183,6 +183,18 @@ export default class Chat extends React.Component {
     )
   };
 
+  // This function makes the input box disappear when the user is not online.
+  renderInputToolbar(props) {
+    if (this.state.isConnected == false) {
+    } else {
+      return(
+        <InputToolbar
+        {...props}
+        />
+      );
+    }
+  }
+
   render() {
     const backgroundColor = this.props.route.params.backgroundColor;
 
@@ -190,6 +202,7 @@ export default class Chat extends React.Component {
       <View style={{flex:1}}>
         <GiftedChat
           renderBubble={this.renderBubble.bind(this)}
+          renderInputToolbar={this.renderInputToolbar.bind(this)}
           messages={this.state.messages}
           onSend={usersNewMessage => this.onSend(usersNewMessage)}
           user={{
