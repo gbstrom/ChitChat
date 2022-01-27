@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Platform, KeyboardAvoidingView, Image } from 'react-native';
-import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, InputToolbar, CustomActions } from 'react-native-gifted-chat';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -207,6 +207,11 @@ export default class Chat extends React.Component {
     }
   }
 
+  // This function is triggered by the renderActions prop of GiftedChat. It connects Chat.js to the photo, camera & location code.
+  renderCustomActions = (props) => {
+    return <CustomActions {...props} />;
+  };
+
   render() {
     const backgroundColor = this.props.route.params.backgroundColor;
 
@@ -222,6 +227,7 @@ export default class Chat extends React.Component {
             name: this.state.name,
             avatar: this.state.user.avatar,
           }}
+          renderActions={this.renderCustomActions}
         />
         {/* This code here is necessary to prevent the keyboard from blocking the input box on older Android phones. */}
         { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null }
