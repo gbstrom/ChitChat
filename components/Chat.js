@@ -85,27 +85,27 @@ export default class Chat extends React.Component {
     // If the user isn't online, then it displays the messages from AsyncStorage on the user's device.
     NetInfo.fetch().then(connection => {
       if (connection.isConnected) {
-      this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
-        if (!user) {
-          return await firebase.auth().signInAnonymously();
-        }
-        this.setState({
-          uid: user.uid,
-          messages: [],
-          user: {
-            _id: user.uid,
-            name: name,
-            avatar: "https://placeimg.com/140/140/any",
-          },
+        this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+          if (!user) {
+            return await firebase.auth().signInAnonymously();
+          }
+          this.setState({
+            uid: user.uid,
+            messages: [],
+            user: {
+              _id: user.uid,
+              name: name,
+              avatar: "https://placeimg.com/140/140/any",
+            },
+          });
+          this.unsubscribe = this.referenceChatMessages
+            .orderBy("createdAt", "desc")
+            .onSnapshot(this.onCollectionUpdate);
         });
-        this.unsubscribe = this.referenceChatMessages
-          .orderBy("createdAt", "desc")
-          .onSnapshot(this.onCollectionUpdate);
-      });
-    } else {
-      console.log('offline');
-    }
-  });
+      } else {
+        console.log('offline');
+      };
+    });
 
   };
 
