@@ -7,8 +7,6 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location'
 import MapView from 'react-native-maps';
 
-
-
 export default class CustomActions extends Component {
   state = {
     image: null,
@@ -74,12 +72,13 @@ export default class CustomActions extends Component {
         switch (buttonIndex) {
           case 0:
             console.log('user wants to pick an image');
-            return;
+            return this.pickImage();
           case 1:
             console.log('user wants to take a photo');
-            return;
+            return this.takePhoto();
           case 2:
             console.log('user wants to get their location');
+            return this.getLocation();
           default:
         }
       },
@@ -119,6 +118,6 @@ const styles = StyleSheet.create({
     },
    });
 
-   CustomActions.contextTypes = {
-    actionSheet: PropTypes.func,
-   };
+CustomActions.contextTypes = {
+actionSheet: PropTypes.func,
+};
