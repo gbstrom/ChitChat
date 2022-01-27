@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, Image,  } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Button, Image } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location'
 import MapView from 'react-native-maps';
+import PropTypes from 'prop-types';
+import React from 'react';
+
 
 export default class CustomActions extends Component {
   state = {
@@ -58,6 +61,30 @@ export default class CustomActions extends Component {
       }
     }
   }
+
+  onActionPress = () => {
+    const options = ['Choose From Library', 'Take Picture', 'Send Location', 'Cancel'];
+    const cancelButtonIndex = options.length - 1;
+    this.context.actionSheet().showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+      },
+      async (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            console.log('user wants to pick an image');
+            return;
+          case 1:
+            console.log('user wants to take a photo');
+            return;
+          case 2:
+            console.log('user wants to get their location');
+          default:
+        }
+      },
+    );
+  };
 
   render() {
     return (
