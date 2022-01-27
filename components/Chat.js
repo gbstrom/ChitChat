@@ -27,6 +27,7 @@ export default class Chat extends React.Component {
 				name: '',
 				avatar: '',
 			},
+      isConnected: false,
     }
 
   if (!firebase.apps.length){
@@ -100,13 +101,15 @@ export default class Chat extends React.Component {
               name: name,
               avatar: "https://placeimg.com/140/140/any",
             },
+            isConnected: true,
           });
           this.unsubscribe = this.referenceChatMessages
             .orderBy("createdAt", "desc")
             .onSnapshot(this.onCollectionUpdate);
         });
       } else {
-        this.getMessages()
+        this.setState({ isConnected: false });
+        this.getMessages();
       };
     });
 
@@ -133,8 +136,10 @@ export default class Chat extends React.Component {
   };
 
   componentWillUnmount() {
-    this.unsubscribe();
-    this.authUnsubscribe();
+    if (this.state.isConnected) {
+      this.unsubscribe();
+      this.authUnsubscribe();
+    }
   }
 
   // this function adds whatever the user has just typed in as a new document in the firebase collection. It is called inside the onSend function.
