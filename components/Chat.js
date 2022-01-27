@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Platform, KeyboardAvoidingView, Image } from 'react-native';
-import { GiftedChat, Bubble, InputToolbar, CustomActions } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -10,6 +10,7 @@ import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import MapView from 'react-native-maps';
+import CustomActions from './CustomActions';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7cUL5bWXIiPBYV7H6zSU3odUrtNP55mQ",
