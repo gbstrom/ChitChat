@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Button, Image } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -24,7 +24,7 @@ export default class CustomActions extends Component {
      if (!result.cancelled) {
        this.setState({
          image: result
-       });  
+       });
      }
 
    }
@@ -39,11 +39,13 @@ export default class CustomActions extends Component {
       }).catch(error => console.log(error));
  
       if (!result.cancelled) {
-        this.setState({
-          image: result
-        });  
+        // this.setState({
+        //   image: result
+        // });
+        const imageUrl = await this.uploadImageFetch(result.uri);
+        this.props.onSend({ image: imageUrl });
       }
- 
+
     }
   }
 
@@ -85,6 +87,33 @@ export default class CustomActions extends Component {
     );
   };
 
+  uploadImageFetch = async (uri) => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+
+    const imageNameBefore = uri.split("/");
+    const imageName = imageNameBefore[imageNameBefore.length - 1];
+
+    const ref = firebase.storage().ref().child(`images/${imageName}`);
+
+    const snapshot = await ref.put(blob);
+
+    blob.close();
+
+    return await snapshot.ref.getDownloadURL();
+  };
+
   render() {
     return (
       <TouchableOpacity style={[styles.container]} onPress={this.onActionPress}>
@@ -119,5 +148,5 @@ const styles = StyleSheet.create({
    });
 
 CustomActions.contextTypes = {
-actionSheet: PropTypes.func,
+    actionSheet: PropTypes.func,
 };
