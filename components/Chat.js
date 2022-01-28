@@ -135,6 +135,8 @@ export default class Chat extends React.Component {
         text: data.text,
         createdAt: data.createdAt.toDate(),
         user: data.user,
+        image: data.image,
+        location: data.location
       });
     });
     this.setState({
@@ -161,6 +163,8 @@ export default class Chat extends React.Component {
 			createdAt: message.createdAt,
 			user: this.state.user,
       uid: this.state.uid,
+      image: message.image || "",
+      location: message.location || null,
 		});
 	};
 
