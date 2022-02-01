@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Button, Image } from 'react-native';
-// import * as Permissions from 'expo-permissions';
+import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location'
 import { Camera } from 'expo-camera';
@@ -15,27 +15,6 @@ export default class CustomActions extends Component {
     location: null,
   }
 
-  // Someone else's code, which also doesn't work:
-
-  // pickImage = async () => {
-  //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
- 
-  //   try {
-  //    if(status === 'granted') {
-  //      let result = await ImagePicker.launchImageLibraryAsync({
-  //        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //      }).catch(error => console.log(error));
- 
-  //      if (!result.cancelled) {
-  //        const imageUrl = await this.uploadImageFetch(result.uri);
-  //        this.props.onSend({ image: imageUrl });
-  //      }
-  //    }
-  //  } catch (error) {
-  //    console.error(error);
-  //  }
-  //  };
-
   pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -46,9 +25,11 @@ export default class CustomActions extends Component {
       }).catch(error => console.log(error));
 
       if (!result.cancelled) {
-        this.setState({
-          image: result
-        });
+        // this.setState({
+        //   image: result
+        // });
+        const imageUrl = await this.uploadImageFetch(result.uri);
+        this.props.onSend({ image: imageUrl });
       }
     }
   } catch (error) {
@@ -65,12 +46,15 @@ export default class CustomActions extends Component {
         mediaTypes: 'Images',
       }).catch(error => console.log(error));
  
+      console.log('after trying to take a photo, the result is ' + result);
+
       if (!result.cancelled) {
-        this.setState({
-          image: result
-        });
-        // const imageUrl = await this.uploadImageFetch(result.uri);
-        // this.props.onSend({ image: imageUrl });
+        console.log('when we try to set the state, the result is ' + result);
+        // this.setState({
+        //   image: result
+        // });
+        const imageUrl = await this.uploadImageFetch(result.uri);
+        this.props.onSend({ image: imageUrl });
       }
 
     }
@@ -80,14 +64,20 @@ export default class CustomActions extends Component {
   }
 
   getLocation = async () => {
-    const { status } = await Location.getCurrentPositionPermissionsAsync();
+    const { status } = await Location.requestForegroundPermissionsAsync();
     try {
     if(status === 'granted') {
       let result = await Location.getCurrentPositionAsync({});
  
       if (result) {
-        this.setState({
-          location: result
+        // this.setState({
+        //   location: result
+        // });
+        this.props.onSend({
+          location: {
+              longitude: result.coords.longitude,
+              latitude: result.coords.latitude,
+          },
         });
       }
     }
