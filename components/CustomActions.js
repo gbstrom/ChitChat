@@ -2,10 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Button, Image } from 'react-native';
-import * as Permissions from 'expo-permissions';
+// import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location'
+import { Camera } from 'expo-camera';
 import MapView from 'react-native-maps';
+import firebase from 'firebase/compat/app';
 
 export default class CustomActions extends Component {
   state = {
@@ -13,44 +15,73 @@ export default class CustomActions extends Component {
     location: null,
   }
 
+  // Someone else's code, which also doesn't work:
+
+  // pickImage = async () => {
+  //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+ 
+  //   try {
+  //    if(status === 'granted') {
+  //      let result = await ImagePicker.launchImageLibraryAsync({
+  //        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //      }).catch(error => console.log(error));
+ 
+  //      if (!result.cancelled) {
+  //        const imageUrl = await this.uploadImageFetch(result.uri);
+  //        this.props.onSend({ image: imageUrl });
+  //      }
+  //    }
+  //  } catch (error) {
+  //    console.error(error);
+  //  }
+  //  };
+
   pickImage = async () => {
-   const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-   if(status === 'granted') {
-     let result = await ImagePicker.launchImageLibraryAsync({
-       mediaTypes: 'Images',
-     }).catch(error => console.log(error));
+    try {
+    if(status === 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      }).catch(error => console.log(error));
 
-     if (!result.cancelled) {
-       this.setState({
-         image: result
-       });
-     }
-
-   }
+      if (!result.cancelled) {
+        this.setState({
+          image: result
+        });
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
   }
 
   takePhoto = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA, Permissions.MEDIA_LIBRARY);
+    const { status } = await Camera.requestCameraPermissionsAsync();
 
+    try {
     if(status === 'granted') {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: 'Images',
       }).catch(error => console.log(error));
  
       if (!result.cancelled) {
-        // this.setState({
-        //   image: result
-        // });
-        const imageUrl = await this.uploadImageFetch(result.uri);
-        this.props.onSend({ image: imageUrl });
+        this.setState({
+          image: result
+        });
+        // const imageUrl = await this.uploadImageFetch(result.uri);
+        // this.props.onSend({ image: imageUrl });
       }
 
     }
+  } catch (error) {
+    console.error(error);
+  }
   }
 
   getLocation = async () => {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION_FOREGROUND);
+    const { status } = await Location.getCurrentPositionPermissionsAsync();
+    try {
     if(status === 'granted') {
       let result = await Location.getCurrentPositionAsync({});
  
@@ -60,6 +91,9 @@ export default class CustomActions extends Component {
         });
       }
     }
+  } catch (error) {
+    console.error(error);
+  }
   }
 
   onActionPress = () => {

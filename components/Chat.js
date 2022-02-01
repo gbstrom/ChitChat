@@ -1,14 +1,11 @@
 import React from 'react';
-import { View, Platform, KeyboardAvoidingView, Image } from 'react-native';
+import { View, Platform, KeyboardAvoidingView, Button, Image } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
-import * as Permissions from 'expo-permissions';
-import * as ImagePicker from 'expo-image-picker';
-import * as Location from 'expo-location';
 import MapView from 'react-native-maps';
 import CustomActions from './CustomActions';
 
@@ -37,14 +34,13 @@ export default class Chat extends React.Component {
       location: null,
     }
 
-  if (!firebase.apps.length){
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length){
+      firebase.initializeApp(firebaseConfig);
     }
 
-  this.referenceChatMessages = firebase.firestore().collection("messages");
+    this.referenceChatMessages = firebase.firestore().collection("messages");
 
   }
-
 
   // This function sets the messages state of the app instance on the user's device equal to the messages in AsyncStorage
   async getMessages() {
@@ -123,7 +119,7 @@ export default class Chat extends React.Component {
   };
 
   // this function gets all the messages in firebase and adds them to the state of the app instance running on the user's device. It is constantly
-  // running in somme mysterious way that is set up in the context of the unsubscribe function in componentDidMount.
+  // running in somme mysterious way that is set up in the unsubscribe function in componentDidMount.
   onCollectionUpdate = (querySnapshot) => {
     const messages = [];
     // go through each document
@@ -195,7 +191,7 @@ export default class Chat extends React.Component {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#000'
+            backgroundColor: 'blue'
           }
         }}
       />
@@ -229,8 +225,8 @@ export default class Chat extends React.Component {
               borderRadius: 13,
               margin: 3}}
             region={{
-              latitude: currentMessage.location.latitude,
-              longitude: currentMessage.location.longitude,
+              latitude: parseInt(currentMessage.location.latitude),
+              longitude: parseInt(currentMessage.location.longitude),
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
@@ -244,10 +240,10 @@ export default class Chat extends React.Component {
     const backgroundColor = this.props.route.params.backgroundColor;
 
     return (
-      <View style={{flex:1}}>
+      <View style={{ backgroundColor: backgroundColor, flex:1}}>
         <GiftedChat
           renderBubble={this.renderBubble.bind(this)}
-          renderInputToolbar={this.renderInputToolbar.bind(this)}
+          renderInputToolbar={this.renderInputToolbar.bind(this)} // is this the problem?
           messages={this.state.messages}
           onSend={usersNewMessage => this.onSend(usersNewMessage)}
           user={{
