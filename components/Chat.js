@@ -1,13 +1,18 @@
 import React from 'react';
 import { View, Platform, KeyboardAvoidingView, Button, Image } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+// import firebase from 'firebase/compat/app';
+// import 'firebase/compat/auth';
+// import 'firebase/compat/firestore';
+import firebase from "firebase";
+import "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import MapView from 'react-native-maps';
 import CustomActions from './CustomActions';
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7cUL5bWXIiPBYV7H6zSU3odUrtNP55mQ",
@@ -34,8 +39,10 @@ export default class Chat extends React.Component {
       location: null,
     }
 
-    if (!firebase.apps.length){
+    if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
+      const firestore = firebase.firestore();
+      firestore.settings({ ignoreUndefinedProperties: true });
     }
 
     this.referenceChatMessages = firebase.firestore().collection("messages");
