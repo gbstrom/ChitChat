@@ -47,16 +47,13 @@ export default class CustomActions extends Component {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
       }).catch(error => console.log(error));
- 
-      console.log('after trying to take a photo, the result is ' + result);
 
       if (!result.cancelled) {
-        console.log('when we try to set the props, the result is ' + JSON.stringify(result));
+
         // this.setState({
         //   image: result
         // });
         const imageUrl = await this.uploadImageFetch(result.uri);
-        console.log('at line 59 this is the imageUrl: ' + imageUrl);
         this.props.onSend({ image: imageUrl });
       }
 
