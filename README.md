@@ -30,13 +30,21 @@ expo init
 Installation
 
 npm install --save react-navigation
+
 npm install @react-native-async-storage/async-storage
+
 npm install @react-native-community/masked-view
+
 npm install --save firebase@8.2.3
+
 npm install react-native-gifted-chat --save
+
 npm install expo-image-picker
+
 npm install expo-location
+
 npm install expo-camera
+
 npm install react-native-maps
 
 [Note: expo-permissions, which I was initially planning to use, has been deprecated, so instead the app uses more specific permissions packages expo-image-picker, expo-camera, etc.]
